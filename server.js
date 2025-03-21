@@ -13,6 +13,37 @@ const db = new sqlite3.Database("database.db", (err) => {
     console.log("Connected to SQLite database.");
 });
 
+
+db.serialize(() => {
+db.run(`CREATE TABLE subject_list (
+    subject_id INTEGER PRIMARY KEY,
+    subject_name TEXT,
+    subject_logo TEXT,
+    subject_code TEXT,
+    subject_rel_date TEXT
+);`);
+
+    db.run(`CREATE TABLE chapter_list (
+    chapter_id INTEGER PRIMARY KEY,
+    chapter_title TEXT,
+    subject_code TEXT,
+    chapter_code TEXT
+);`);
+db.run(`CREATE TABLE question_list (
+    id INTEGER PRIMARY KEY,
+    question TEXT,
+    answer TEXT,
+    chapter_id INTEGER,
+    create_at TEXT
+);`);
+
+    
+});
+
+
+
+
+
 // API Route to Get Subject List
 app.get("/subjects", (req, res) => {
     const sql = "SELECT * FROM subject_list";
