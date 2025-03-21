@@ -3,10 +3,10 @@ const sqlite3 = require("sqlite3").verbose();
 
 const app = express();
 const port = 3000;
-
+/*
 
 const express = require('express');
-const app = express();
+const app = express();*/
 
 // Body parser middleware to parse JSON data
 app.use(express.json()); // For parsing application/json
