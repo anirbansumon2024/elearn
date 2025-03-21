@@ -4,6 +4,14 @@ const sqlite3 = require("sqlite3").verbose();
 const app = express();
 const port = 3000;
 
+
+const express = require('express');
+const app = express();
+
+// Body parser middleware to parse JSON data
+app.use(express.json()); // For parsing application/json
+app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
+
 // Connect to SQLite Database
 const db = new sqlite3.Database("database.db", (err) => {
     if (err) {
@@ -83,16 +91,24 @@ app.get("/questions", (req, res) => {
 
 //API Route to Add a New Subject
 app.post("/subjects", (req, res) => {
-    const {id, subject_name, subject_logo, subject_code, subject_rel_date } = req.body;
-    const sql = `INSERT INTO subject_list (subject_id,subject_name, subject_logo, subject_code, subject_rel_date)
-                 VALUES (?, ?, ?, ?,?)`;
-    db.run(sql, [id,subject_name, subject_logo, subject_code, subject_rel_date], function(err) {
+    // সঠিকভাবে body থেকে ডাটা ডেসট্রাকচার করা
+    const { subject_id, subject_name, subject_logo, subject_code, subject_rel_date } = req.body;
+
+    if (!subject_id || !subject_name || !subject_code) {
+        return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const sql = `INSERT INTO subject_list (subject_id, subject_name, subject_logo, subject_code, subject_rel_date)
+                 VALUES (?, ?, ?, ?, ?)`;
+
+    db.run(sql, [subject_id, subject_name, subject_logo, subject_code, subject_rel_date], function(err) {
         if (err) {
-            return res.status(500).json({ error: err.message });
+            return res.status(500).json({ error: "Failed to add subject", details: err.message });
         }
         res.status(201).json({ message: "Subject added successfully", id: this.lastID });
     });
 });
+
 
 // API Route to Add a New Chapter
 app.post("/chapters", (req, res) => {
