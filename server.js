@@ -80,6 +80,48 @@ app.get("/questions", (req, res) => {
     });
 });
 
+
+API Route to Add a New Subject
+app.post("/subjects", (req, res) => {
+    const { subject_name, subject_logo, subject_code, subject_rel_date } = req.body;
+    const sql = `INSERT INTO subject_list (subject_name, subject_logo, subject_code, subject_rel_date)
+                 VALUES (?, ?, ?, ?)`;
+    db.run(sql, [subject_name, subject_logo, subject_code, subject_rel_date], function(err) {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.status(201).json({ message: "Subject added successfully", id: this.lastID });
+    });
+});
+
+// API Route to Add a New Chapter
+app.post("/chapters", (req, res) => {
+    const { chapter_title, subject_code, chapter_code } = req.body;
+    const sql = `INSERT INTO chapter_list (chapter_title, subject_code, chapter_code)
+                 VALUES (?, ?, ?)`;
+    db.run(sql, [chapter_title, subject_code, chapter_code], function(err) {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.status(201).json({ message: "Chapter added successfully", id: this.lastID });
+    });
+});
+
+// API Route to Add a New Question
+app.post("/questions", (req, res) => {
+    const { question, answer, chapter_id, create_at } = req.body;
+    const sql = `INSERT INTO question_list (question, answer, chapter_id, create_at)
+                 VALUES (?, ?, ?, ?)`;
+    db.run(sql, [question, answer, chapter_id, create_at], function(err) {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        res.status(201).json({ message: "Question added successfully", id: this.lastID });
+    });
+});
+
+
+
 // Start the Server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
