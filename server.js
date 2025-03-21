@@ -81,7 +81,7 @@ app.get("/questions", (req, res) => {
 });
 
 
-API Route to Add a New Subject
+//API Route to Add a New Subject
 app.post("/subjects", (req, res) => {
     const { subject_name, subject_logo, subject_code, subject_rel_date } = req.body;
     const sql = `INSERT INTO subject_list (subject_name, subject_logo, subject_code, subject_rel_date)
