@@ -83,10 +83,10 @@ app.get("/questions", (req, res) => {
 
 //API Route to Add a New Subject
 app.post("/subjects", (req, res) => {
-    const { subject_name, subject_logo, subject_code, subject_rel_date } = req.body;
-    const sql = `INSERT INTO subject_list (subject_name, subject_logo, subject_code, subject_rel_date)
-                 VALUES (?, ?, ?, ?)`;
-    db.run(sql, [subject_name, subject_logo, subject_code, subject_rel_date], function(err) {
+    const {id, subject_name, subject_logo, subject_code, subject_rel_date } = req.body;
+    const sql = `INSERT INTO subject_list (subject_id,subject_name, subject_logo, subject_code, subject_rel_date)
+                 VALUES (?, ?, ?, ?,?)`;
+    db.run(sql, [id,subject_name, subject_logo, subject_code, subject_rel_date], function(err) {
         if (err) {
             return res.status(500).json({ error: err.message });
         }
